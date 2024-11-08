@@ -5,7 +5,7 @@
 \# List all running processes  
 `Get-Process`  
 \# Execution Policy Information  
-`Get-ExecutionPolicy`  
+`Get-ExecutionPolicy -List`  
 \# Allow unsigned scripts execution for the current user  
 `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`  
 `powershell -ep bypass`  
@@ -22,9 +22,10 @@
 `Get-LocalGroupMember -Group <GROUP NAME>`  
 \# Get Firewall Information  
 ` Get-NetFirewallProfile`  
-\# Get Defender Status  
+\# Get Windows Defender Status  
 `Get-MpComputerStatus | Select AntivirusEnabled,RealTimeProtectionEnabled,IoavProtectionEnabled,AntispywareEnabled,IsTamperProtected`  
-\# List AV Products  
+`Get-MpPreference` (some items require admin access to display information)  
+\# List other AV Products  
 `Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct`  
 `'0x{0:x}' -f <ProductState>`  (10 from the 4th number position = on)  
 \# Disable UAC (requires admin)  
