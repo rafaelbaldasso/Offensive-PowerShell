@@ -9,6 +9,11 @@
 \# Allow unsigned scripts execution for the current user  
 `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`  
 `powershell -ep bypass`  
+\# Get UAC Configuration  
+`Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -Property EnableLUA,ConsentPromptBehaviorAdmin`  
+(EnableLUA = UAC [0 = False, 1 = True], ConsentPromptBehaviorAdmin = Prompt Behavior [0-5])  
+\# Disable UAC (requires admin)  
+`cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f"`  
 \# Get Current Computer Information  
 `Get-ComputerInfo -Property CsName,WindowsVersion,WindowsBuildLabEx,WindowsEditionId,OsArchitecture,CsProcessors,CsTotalPhysicalMemory`  
 \# Get Network Interfaces Information  
@@ -28,8 +33,6 @@
 \# List other AV Products  
 `Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct`  
 `'0x{0:x}' -f <ProductState>`  (10 from the 4th number position = on)  
-\# Disable UAC (requires admin)  
-`cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f"`  
 \# Disables realtime monitoring (requires admin)    
 `Set-MpPreference -DisableRealtimeMonitoring $true`  
 \# Disables scanning for downloaded files or attachments (requires admin)    
@@ -46,3 +49,11 @@
 `Set-MPPReference -DisableScriptScanning $true`  
 \# Exclude files by extension (requires admin)  
 `Set-MpPreference -ExclusionExtension "ps1"`  
+\# Code Injection - Invoke-Expression  
+`$<STRING> = 'Write-Output "Test text!"'`  
+`Invoke-Expression $<STRING>`  
+\# Remote Code Execution - Invoke-Command  
+`$computer = "<COMPUTER>"`  
+`$creds = Get-Credential`  
+`$script = { Write-Output "Test text!" }`  
+`Invoke-Command -ComputerName $computer -Credential $creds -ScriptBlock $script`  
