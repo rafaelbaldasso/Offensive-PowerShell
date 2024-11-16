@@ -152,3 +152,25 @@
 `iex ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("V3JpdGUtT3V0cHV0ICJUZXN0IHRleHQi")))`  
   
 ##### Function Renaming  
+```
+function ABC {
+ param ($a)
+ Write-Output $a
+}
+ABC "Test!"
+```
+(Show-Message -> ABC)  
+  
+##### Unicode Chars  
+`$unicode = [char]0x57 + [char]0x72 + [char]0x69 + [char]0x74 + [char]0x65 + [char]0x2d + [char]0x4f + [char]0x75 + [char]0x74 + [char]0x70 + [char]0x75 + [char]0x74 + [char]0x20 + [char]0x22 + [char]0x48 + [char]0x65 + [char]0x6c + [char]0x6c + [char]0x6f + [char]0x21 + [char]0x22`  
+`$unicode`  
+`iex $unicode`  
+  
+##### Dynamic Variables  
+`$wc = New-Object System.Net.WebClient`  
+`$varName = "w" + "e" + "b" + "C" + "l" + "i" + "e" + "n" + "t"`  
+`Set-Variable -Name $varName -Value (New-Object System.Net.WebClient)`  
+`$webclient`  
+
+### Persistence  
+
