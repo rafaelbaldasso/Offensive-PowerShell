@@ -19,7 +19,7 @@ foreach ($User in $Users) {
     catch {
     }
 
-    Start-Sleep -Seconds 3
+    #Start-Sleep -Seconds 1
 }
 
 Write-Host "[*] Done!" -ForegroundColor Cyan
