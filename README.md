@@ -52,7 +52,7 @@
 ## AV / Firewall  
   
 ##### Get Firewall Information  
-` Get-NetFirewallProfile`  
+`Get-NetFirewallProfile`  
   
 ##### Get Windows Defender Status  
 `Get-MpComputerStatus | Select AntivirusEnabled,RealTimeProtectionEnabled,IoavProtectionEnabled,AntispywareEnabled,IsTamperProtected`  
