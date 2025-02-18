@@ -1,7 +1,7 @@
 param ([string]$UserListPath, [string]$Password)
 
 if (-not $UserListPath -or -not $Password) {
-    Write-Host "`n [>] Usage: .\ldap_spray.ps1 <USERS FILE> <PASSWORD>`n"
+    Write-Host "`n[>] Usage: .\ldap_spray.ps1 <USERS FILE> <PASSWORD>`n"
     exit
 }
 
