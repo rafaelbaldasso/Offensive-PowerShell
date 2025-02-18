@@ -1,7 +1,7 @@
 param ([string]$UserListPath, [string]$Password)
 
 if (-not $UserListPath -or -not $Password) {
-    Write-Host "`n [>] Usage: .\ldap_spray.ps1 <USERS FILE> <PASSWORD>"
+    Write-Host "`n [>] Usage: .\ldap_spray.ps1 <USERS FILE> <PASSWORD>`n"
     exit
 }
 
@@ -27,4 +27,4 @@ foreach ($User in $Users) {
     #Start-Sleep -Seconds 1
 }
 
-Write-Host "[*] Done!" -ForegroundColor Cyan
+Write-Host "`n[*] Done!`n" -ForegroundColor Cyan
